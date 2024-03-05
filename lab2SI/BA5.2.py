@@ -12,23 +12,22 @@ def bee_waggle_dance(solution, ngh, minVal, maxVal):
 def generate_random_solution(maxParameters, minVal, maxVal):
     return np.random.uniform(low=minVal, high=maxVal, size=maxParameters)
 
-    
 def f(x):
-    g1 = 1 - (x[1]**3)*(x[2])/(7.178*x[0]**4) > 0
-    g2 = 1 / ((x[0]**2) *5.108) + (4*x[1]**2-x[0]*x[1])/(12.566*(x[1]*x[0]**3)-x[0]**4) > 0
-    g3 = 1 - (140.45*x[0])/(x[1]**2 * (x[2])) > 0
-    g4 = (x[1]+x[0])/1.5 - 1 > 0
-    g5 = x[0] < 0.005
-    g6 = x[0] > 2.0
-    g7 = x[1] < 0.25
-    g8 = x[1] > 1.3
-    g9 = np.round(x[2]) < 2.0
-    g10 = np.round(x[2]) > 15.0
-
-    if g1 or g2 or g3 or g4 or g5 or g6 or g7 or g8 or g9 or g10:
-        return 10000  # Penalty for violating constraints
+    func=(x[2] + 2) * x[1] * (x[0] ** 2)
+    g1 = 1 - (((x[1] ** 3) * x[2]) / (7.178 * (x[0] ** 4))) <=0
+    g2 = ((4 * (x[1] ** 2) - x[0] * x[1]) / (12.566 * (x[1] * (x[0] ** 3)) - x[0] ** 4)) + (1 / (5.108 * (x[0] ** 2))) - 1 <= 0
+    g3 = 1 - ((140.45 * x[0]) / ((x[1] ** 2) * x[2])) <= 0
+    g4 = ((x[0] + x[1]) / 1.5) - 1<=0
+    g5 = x[0] >= 0.005
+    g6 = x[0] <= 2.0
+    g7 = x[1] >= 0.25
+    g8 = x[1] <= 1.3
+    g9 = x[2] >= 2.0
+    g10=x[2] <= 15.0
+    if g1 and g2 and g3 and g4 and g5 and g6 and g7 and g8 and g9 and g10: 
+        return func  # Penalty for violating constraints
     else:
-        return (np.round(x[2]) + 2) * x[1] * x[0]**2
+        return 10000
     
 population_show = np.zeros((30, dim + 1))
 minVal = np.array([0.005, 0.25, 2.0])
@@ -150,6 +149,7 @@ def animate(i):
     population_show[:] = GBA(population_show)
     #print(population_show)
     fitnessValues_show=list(map(f, population_show))
+    print(fitnessValues_show)  
     minFitness = min(fitnessValues_show)
     MinFitnessValues.append(minFitness)
     #print(fitnessValues_show)

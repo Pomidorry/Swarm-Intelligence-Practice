@@ -14,7 +14,7 @@ def generate_random_solution(maxParameters, minVal, maxVal):
 
     
 def evaluate_fitness(x):
-    condition = np.array(x[0])**2 + np.array(x[0])**2 >= 2
+    condition = np.array(x[0])**2 + np.array(x[1])**2 >= 2
     
     func_values = np.array((1-x[0])**2 + 100*(x[1]-x[0]**2)**2)
     func_values[condition] = 10000
@@ -35,8 +35,8 @@ def GBA(population_show):
     # Set the problem parameters
     maxIteration = 200
     maxParameters = 2
-    minVal = np.array([-10, -10])
-    maxVal = np.array([10, 10])
+    minVal = np.array([-1.25, -1.25])
+    maxVal = np.array([1.25, 1.25])
 
     # Set the grouped bees algorithm (GBA) parameters
     R_ngh = 1
@@ -115,8 +115,8 @@ def animate(i):
         plt.legend()
     elif maxParameters == 2:
         ax = fig.add_subplot(111, projection='3d')
-        X = np.arange(-10, 10, 0.01)
-        Y = np.arange(-10, 10, 0.01)
+        X = np.arange(-1.25, 1.25, 0.01)
+        Y = np.arange(-1.25, 1.25, 0.01)
         X, Y = np.meshgrid(X, Y)
         Z = evaluate_fitness([X, Y])
         ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.2)
@@ -135,8 +135,9 @@ def animate(i):
     # population_show[:] = GBA(population_show)
     # print(population_show[:, 0], population_show[:, 1])
     population_show[:] = GBA(population_show)
-    minFitness = min(population_show[:, 2])
-    print("MIN: ", minFitness)
+    minFitness = np.min(population_show[:, 2])
+    min_index = np.argmin(population_show[:, 2])
+    print("MIN: ",population_show[min_index])
     # MinFitnessValues.append(minFitness)
 
     generationCounter += 1

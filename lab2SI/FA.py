@@ -13,8 +13,8 @@ def rosenbrock2(x):
 
 
 nVar = 2
-VarMin = np.array([-1.5, -1.5])
-VarMax = np.array([1.5, 1.5])
+VarMin = np.array([-1.25, -1.25])
+VarMax = np.array([1.25, 1.25])
 
 # Firefly Algorithm Parameters
 MaxIt = 50
@@ -101,7 +101,7 @@ ax.plot_wireframe(X, Y, Z, rstride=30, cstride=30, color='c', alpha=0.6)
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Fitness')
-ax.set_title('GA')
+ax.set_title('FA')
 # # Animation
 # fig, ax = plt.subplots()
 # xdata, ydata = [], []
@@ -124,7 +124,7 @@ def update(frame):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Fitness')
-    ax.set_title('GA')
+    ax.set_title('FA')
 
 ani = animation.FuncAnimation(fig, update, frames=range(MaxIt), interval=200)
 
