@@ -149,31 +149,31 @@ def animate(i):
         return
     
     plt.clf()
-    if dim == 1:
-        ax = fig.add_subplot(111)
-        X = np.arange(-5.12, 5.12, 0.01)
-        Y = rastrigin([X])
-        ax.plot(X, Y, color='blue', label='Function Curve')
-        for individ, val in zip(particles_show, fitnessValues_show):
-            ax.scatter(individ[0], val, marker='*', edgecolors='red')
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_title('PSO')
-        plt.legend()
-    elif dim == 2:
-        ax = fig.add_subplot(111, projection='3d')
-        X = np.arange(-5.12, 5.12, 0.01)
-        Y = np.arange(-5.12, 5.12, 0.01)
-        X, Y = np.meshgrid(X, Y)
-        Z = f([X, Y])
-        ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.2)
-        for individ, val in zip(particles_show, fitnessValues_show):
-            ax.scatter(individ[0], individ[1], val, marker='*', edgecolors='red')
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Fitness')
-        ax.set_title('PSO')
-    elif dim >= 3:
+    # if dim == 1:
+    #     ax = fig.add_subplot(111)
+    #     X = np.arange(-5.12, 5.12, 0.01)
+    #     Y = rastrigin([X])
+    #     ax.plot(X, Y, color='blue', label='Function Curve')
+    #     for individ, val in zip(particles_show, fitnessValues_show):
+    #         ax.scatter(individ[0], val, marker='*', edgecolors='red')
+    #     ax.set_xlabel('X')
+    #     ax.set_ylabel('Y')
+    #     ax.set_title('PSO')
+    #     plt.legend()
+    # elif dim == 2:
+    #     ax = fig.add_subplot(111, projection='3d')
+    #     X = np.arange(-5.12, 5.12, 0.01)
+    #     Y = np.arange(-5.12, 5.12, 0.01)
+    #     X, Y = np.meshgrid(X, Y)
+    #     Z = f([X, Y])
+    #     ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.2)
+    #     for individ, val in zip(particles_show, fitnessValues_show):
+    #         ax.scatter(individ[0], individ[1], val, marker='*', edgecolors='red')
+    #     ax.set_xlabel('X')
+    #     ax.set_ylabel('Y')
+    #     ax.set_zlabel('Fitness')
+    #     ax.set_title('PSO')
+    if dim >= 3:
         plt.plot(MinFitnessValues[int(max_iter * 0.1):], color='red')
         plt.ylabel('Min пристосованість')
         plt.ylabel('Покоління')

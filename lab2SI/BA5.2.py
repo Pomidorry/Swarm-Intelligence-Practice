@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-dim=7
+dim=3
 def bee_waggle_dance(solution, ngh, minVal, maxVal):
     # Perform a waggle dance with the solution, neighborhood radius, and min/max values.
     random_offset = (2 * ngh * np.random.rand(solution.size)) - ngh
@@ -14,40 +14,25 @@ def generate_random_solution(maxParameters, minVal, maxVal):
 
     
 def f(x):
-    g1=27 / (x[0] * x[1] ** 2 * x[2]) - 1>0
-    g2=397.5 / (x[0] * x[1] ** 2 * x[2] ** 2) - 1>0
-    g3=1.93 * x[3] ** 3 / (x[1] * x[2] * x[5] ** 4) - 1>0
-    g4=1.93 / (x[1] * x[2] * x[6] ** 4) - 1>0
-    g5=1.0 / (110 * x[5] ** 3) * np.sqrt((745.0 * x[3] / (x[1] * x[2])) ** 2 + 16.9 * 10 ** 6) - 1>0
-    g6=1.0 / (85 * x[6] ** 3) * np.sqrt((745.0 * x[4] / (x[1] * x[2])) ** 2 + 157.5 * 10 ** 6) - 1>0
-    g7=x[1] * x[2] / 40 - 1>0
-    g8=1 * x[1] / x[0] - 1>0
-    g9=x[0] / (12 * x[1]) - 1>0
-    g10=(1.5 * x[5] + 1.9) / x[3] - 1>0
-    g11=(1.1 * x[6] + 1.9) / x[4] - 1>0
-    g12=x[0]<2.6
-    g13=x[0]>3.6
-    g14=x[1]<0.7
-    g15=x[1]>0.8
-    g16=np.round(x[2])<17
-    g17=np.round(x[2])>28
-    g18=x[3]<7.3
-    g19=x[3]>8.3
-    g20=x[4]<7.8
-    g21=x[4]>8.3
-    g22=x[5]<2.9
-    g23=x[5]>3.9
-    g24=x[6]<5.0
-    g25=x[6]>5.5
-    func=0.7854*x[0]*x[1]**2*(3.3333*np.round(x[2])**2 + 14.9334*np.round(x[2]) - 43.0934) - 1.508*x[0]*(x[5]**2 + x[6]**2) + 7.4777*(x[5]**3 + x[6]**3) + 0.7854*(x[3]*x[5]**2 + x[4]*x[6]**2)
-    #func[g1 or g2 or g3 or g4 or g5 or g6 or g7 or g8 or g9 or g10 or g11]=10000
-    if g1 or g2 or g3 or g4 or g5 or g6 or g7 or g8 or g9 or g10 or g11 or g12 or g13 or g14 or g15 or g16 or g17 or g18 or g19 or g20 or g21 or g22 or g23 or g24 or g25:
-        func = 10000
-    return func
+    g1 = 1 - (x[1]**3)*(x[2])/(7.178*x[0]**4) > 0
+    g2 = 1 / ((x[0]**2) *5.108) + (4*x[1]**2-x[0]*x[1])/(12.566*(x[1]*x[0]**3)-x[0]**4) > 0
+    g3 = 1 - (140.45*x[0])/(x[1]**2 * (x[2])) > 0
+    g4 = (x[1]+x[0])/1.5 - 1 > 0
+    g5 = x[0] < 0.005
+    g6 = x[0] > 2.0
+    g7 = x[1] < 0.25
+    g8 = x[1] > 1.3
+    g9 = np.round(x[2]) < 2.0
+    g10 = np.round(x[2]) > 15.0
 
+    if g1 or g2 or g3 or g4 or g5 or g6 or g7 or g8 or g9 or g10:
+        return 10000  # Penalty for violating constraints
+    else:
+        return (np.round(x[2]) + 2) * x[1] * x[0]**2
+    
 population_show = np.zeros((30, dim + 1))
-minVal = np.array([2.6, 0.7, 17, 7.3, 7.8, 2.9, 5.0])
-maxVal = np.array([3.6, 0.8, 28, 8.3, 8.3, 3.9, 5.5])
+minVal = np.array([0.005, 0.25, 2.0])
+maxVal = np.array([2.0, 1.3, 15])
 
 
 for i in range(30):
@@ -55,14 +40,15 @@ for i in range(30):
         population_show[i, 0:dim] = solution
         population_show[i, 2]=np.round(population_show[i, 2])
         population_show[i, dim] = f(solution)
-
+        
+fitnessValues_show=list(map(f, population_show))
+print(fitnessValues_show)        
 def GBA(population_show):
     # Set the problem parameters
     maxIteration = 200
-    maxParameters = 7
-    minVal = np.array([2.6, 0.7, 17, 7.3, 7.8, 2.9, 5.0])
-    maxVal = np.array([3.6, 0.8, 28, 8.3, 8.3, 3.9, 5.5])
-
+    maxParameters = 3
+    minVal = np.array([0.005, 0.25, 2.0])
+    maxVal = np.array([2.0, 1.3, 15])
     # Set the grouped bees algorithm (GBA) parameters
     R_ngh = 1
     n = 30
@@ -75,7 +61,7 @@ def GBA(population_show):
     a = (((maxVal - minVal) / 2) - R_ngh) / (nGroups ** 2 - 1)
     b = R_ngh - a
 
-    for i in range(1, nGroups + 1):
+    for i in range(1, nGroups ):
         groups[i - 1] = np.floor(k * i ** 2)
         if groups[i - 1] == 0:
             groups[i - 1] = 1
@@ -162,14 +148,15 @@ def animate(i):
     # population_show[:] = GBA(population_show)
     # print(population_show[:, 0], population_show[:, 1])
     population_show[:] = GBA(population_show)
+    #print(population_show)
     fitnessValues_show=list(map(f, population_show))
     minFitness = min(fitnessValues_show)
     MinFitnessValues.append(minFitness)
-
+    #print(fitnessValues_show)
     print(f"Generation {generationCounter}: Min Fitness = {minFitness}")
 
     best_index = fitnessValues_show.index(min(fitnessValues_show))
-    print("Best individual = ", *population_show[best_index, 0:7], "\n")
+    print("Best individual = ", *population_show[best_index, 0:3], "\n")
     # MinFitnessValues.append(minFitness)
 
     generationCounter += 1
