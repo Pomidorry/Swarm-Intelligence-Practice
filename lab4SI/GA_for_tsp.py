@@ -197,7 +197,7 @@ def main():
     CROSSOVER_RATE = 0.9
     TARGET = 564
 
-    cities = load_tsp_file("E:\\lab4SI\\xqg237.tsp")
+    cities = load_tsp_file("E:\\SI\lab4SI\\xqf131.tsp")
     firstPopulation, firstFitest = selectPopulation(cities, POPULATION_SIZE)
     answer, genNumber = geneticAlgorithm(
         firstPopulation,

@@ -5,7 +5,7 @@ import random
 n_population = 200
 crossover_per = 0.8
 mutation_per = 0.2
-n_generations = 9000
+n_generations = 800
 
 def generate_random_points_on_circle(radius, center, num_points):
     """
@@ -184,7 +184,7 @@ def run_ga(points_list, n_population, n_generations, crossover_per, mutation_per
 # Circle parameters
 radius = 10
 center = (5, 5)
-num_points = 200
+num_points = 30
 
 # Generate random points within the circle
 random_points = generate_random_points_on_circle(radius, center, num_points)

@@ -91,6 +91,6 @@ def ant_colony_optimization(points, n_ants, n_iterations, alpha, beta, evaporati
     plt.show()
 
 # Example usage:
-filename = "E:\\lab4SI\\xqg237.tsp"
+filename = "E:\\SI\lab4SI\\xqg237.tsp"
 points = read_tsp_file(filename)
 ant_colony_optimization(points, n_ants=17, n_iterations=200, alpha=1, beta=1, evaporation_rate=0.5, Q=1)
