@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 # Read data from the text file
-with open('Data1.txt', 'r') as file:
+with open('E:\\SI\\lab5SI\\Data2.txt', 'r') as file:
     lines = file.readlines()
 
 knapsack_threshold = int(lines[0].strip())  # Maximum weight the knapsack can hold
@@ -21,12 +21,20 @@ print('Номер товару  Вага  Значення')
 for i in range(len(item_number)):
     print('{0}             {1}      {2}\n'.format(item_number[i], weight[i], value[i]))
 
-solutions_per_pop = 100
+solutions_per_pop = 250
 pop_size = (solutions_per_pop, len(item_number))
 print('Розмір популяції = {}'.format(pop_size))
-initial_population = np.random.randint(2, size=pop_size)
-initial_population = initial_population.astype(int)
-num_generations = 70
+
+def create_individual(): 
+    # Generate a random binary string of the same length as the items list
+    return [rd.randint(0, 1) for i in range(len(data))]
+
+def create_population():  
+    # Create a population of random individuals
+    return [create_individual() for _ in range(solutions_per_pop)]
+#initial_population = np.random.randint(2, size=pop_size)
+initial_population = np.array(create_population())
+num_generations = 100
 print('Початкова популяція: \n{}'.format(initial_population))
 
 
@@ -48,26 +56,28 @@ def selection(fitness, num_parents, population):
     for i in range(num_parents):
         max_fitness_idx = np.where(fitness == np.max(fitness))
         parents[i, :] = population[max_fitness_idx[0][0], :]
-        fitness[max_fitness_idx[0][0]] = -999999
+        fitness[max_fitness_idx[0][0]] = 0
     return parents
 
 
 def crossover(parents, num_offsprings):
-    offsprings = np.empty((num_offsprings, parents.shape[1]))
+    offsprings = np.empty((num_offsprings, parents.shape[1]), dtype=int)  # Задаем тип данных int для массива потомков
     crossover_point = int(parents.shape[1] / 2)
     crossover_rate = 0.8
     i = 0
-    while (parents.shape[0] < num_offsprings):
+    while (i < num_offsprings):  # Исправлено условие завершения цикла
         parent1_index = i % parents.shape[0]
         parent2_index = (i + 1) % parents.shape[0]
         x = rd.random()
         if x > crossover_rate:
             continue
-        parent1_index = i % parents.shape[0]
-        parent2_index = (i + 1) % parents.shape[0]
-        offsprings[i, 0:crossover_point] = parents[parent1_index, 0:crossover_point]
-        offsprings[i, crossover_point:] = parents[parent2_index, crossover_point:]
-        i = +1
+        for j in range(parents.shape[1]):  # Проходим по всем генам потомка
+            if j < crossover_point:
+                offsprings[i, j] = parents[parent1_index, j]  # Гены до точки скрещивания берутся от первого родителя
+            else:
+                offsprings[i, j] = parents[parent2_index, j]  # Гены после точки скрещивания берутся от второго родителя
+        i += 1  # Исправлено увеличение счетчика
+    #print(offsprings)    
     return offsprings
 
 
@@ -83,7 +93,7 @@ def mutation(offsprings):
         if mutants[i, int_random_value] == 0:
             mutants[i, int_random_value] = 1
         else:
-            mutants[i, int_random_value] = 0
+            mutants[i, int_random_value] = 0       
     return mutants
 
 
@@ -91,7 +101,7 @@ def optimize(weight, value, population, pop_size, num_generations, threshold, K)
     parameters, fitness_history = [], []
     best_fitness_history = []
     best_solution = None
-    best_fitness = float('-inf')
+    best_fitness = 0
 
     num_parents = int(pop_size[0] / 2)
     num_offsprings = pop_size[0] - num_parents
@@ -121,6 +131,7 @@ def optimize(weight, value, population, pop_size, num_generations, threshold, K)
         population[parents.shape[0]:, :] = mutants
 
     print('Last population: \n{}\n'.format(population))
+    print(population[0])
     fitness_last_gen = cal_fitness(weight, value, population, threshold)
     print('Fitness of the last population: \n{}\n'.format(fitness_last_gen))
     max_fitness = np.where(fitness_last_gen == np.max(fitness_last_gen))
