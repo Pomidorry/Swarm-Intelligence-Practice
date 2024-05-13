@@ -238,7 +238,7 @@ def pso(cost_func, k=10, dim=2, num_particles=200, max_iter=50, w=0.5, c1=1, c2=
                 plt.show()
 
                 YModelTrain = model(b_list, xTrain)
-
+                print(YModelTrain)
                 # Получение предсказанных значений для тестового набора данных
                 YModelTest = model(b_list, xTest)
 
